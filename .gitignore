@@ -2,4 +2,4 @@
 __pycache__/
 *.pyc
 main.py-v1
-venv
+venv/
