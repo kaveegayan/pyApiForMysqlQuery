@@ -1,0 +1,22 @@
+MIT License
+
+Copyright (c) 2026 Kavee Gayan
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction,**No**, adding a badge to `README.md` is not enough. You also need to add a dedicated file named **`LICENSE`** (or `LICENSE.txt`) in the root directory of your repository.
+
+While displaying the badge in your `README.md` shows readers what terms apply, GitHub depends on the standalone `LICENSE` file to automatically parse, recognize, and mark your repository as open source.
+
+---
+
+### How to Add the `LICENSE` File via GitHub UI
+
+1. Go to your repository home page on GitHub.
+2. Click **Add file** $\rightarrow$ **Create new file**.
+3. Type `LICENSE` in the file name box.
+4. A button labeled **Choose a license template** will appear on the right side.
+5. Click **Choose a license template**, select **MIT License**, fill in your copyright year and name, and click **Submit new license**.
+6. Click **Commit changes...** to save it to your `main` branch.
+
+Once added, GitHub will display a **License** section with an icon in your repository's right-hand sidebar.
