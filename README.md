@@ -164,6 +164,17 @@ bind-address = 0.0.0.0
 systemctl restart mysql
 
 ```
+### 5. Add .dockerignore file to prevent copy unwanted files to docker container
+```bash
+vim .dockerignore
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.env
+.git/
+.gitignore
+```
 ### 5. Start Docker Container
 ```bash
 # you can pass related parameters as arguments
@@ -175,6 +186,7 @@ docker run -d \
   -e DB_NAME="company_db" \
   --add-host=host.docker.internal:host-gateway \
   fastapi-mysql-api
+# Note: DB_HOST="host.docker.internal" and --add-host=host.docker.internal:host-gateway parameters forcing Docker to use Hosting server IP as DB ip sice mysql seperately hosted in Host server
 ```
 ```bash
 # run below command to see if docker container started
