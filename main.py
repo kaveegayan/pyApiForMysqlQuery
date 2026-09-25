@@ -1,4 +1,3 @@
-# ======== Kavee's API=============####
 #Python API application to Get the information from a mysql DB
 #imporing SDKs
 import os
