@@ -182,7 +182,7 @@ docker run -d \
   -p 8000:8000 \
   -e DB_HOST="host.docker.internal" \
   -e DB_USER="root" \
-  -e DB_PASSWORD="Kavimb.1" \
+  -e DB_PASSWORD="DB_secure_password" \
   -e DB_NAME="company_db" \
   --add-host=host.docker.internal:host-gateway \
   fastapi-mysql-api
