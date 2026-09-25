@@ -1,4 +1,4 @@
-# Simple MySQL REST API
+# Python  MySQL REST API
 A lightweight RESTful API built with **Python**, **FastAPI**, and **PyMySQL** to query user records from a MySQL database using environment-based configurations.
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100%2B-009688.svg)](https://fastapi.tiangolo.com/)
@@ -16,7 +16,7 @@ A lightweight RESTful API built with **Python**, **FastAPI**, and **PyMySQL** to
 
 ---
 
-##  Quickstart Guide
+##  Quickstart Guide to deploy directly on linux server
 
 ### 1. Clone the Repository
 ```bash
@@ -37,6 +37,11 @@ USE company_db;
 CREATE TABLE users ( id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(100) NOT NULL, email VARCHAR(100) NOT NULL, role VARCHAR(50) NOT NULL );
 ---insert sample data
 INSERT INTO users (name, email, role) VALUES ('Kavee Smith', 'kavee@abc.com', 'DevOps Engineer');
+---create DB connection user and grant previlige
+CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY 'DB_secure_password';
+GRANT ALL PRIVILEGES ON company_db.* TO 'root'@'%';
+FLUSH PRIVILEGES;
+
 EXIT;
 ```
 ### 3. Create Python Virtual Environment & Install Dependencies:Isolate libraries using FastAPI, Uvicorn, and PyMySQL. 
@@ -69,7 +74,8 @@ DB_NAME=company_db
 vim .gitignore
 .env
  pycache/
- *.pyc
+ *.pyic
+venv/
 ```
 ### 5. Run the application 
 ```bash
@@ -99,3 +105,90 @@ curl http://localhost:8000/users/{id}
 #search by name
 curl http://localhost:8000/users/name/{user_name}
 ```
+
+
+
+## Quickstart Guide to deploy on docker container
+### 1. Clone the Repository
+```bash
+git clone [https://github.com/your-username/pyApiForMysqlQuery.git]
+cd pyApiForMysqlQuery
+```
+### 2. Database Setup
+#### Log into your MySQL server and run the following script to create the database, table, and sample records:
+```bash
+mysql -u root -p
+```
+```sql
+---create databese
+CREATE DATABASE company_db;
+---loging to the database
+USE company_db;
+---create the users table
+CREATE TABLE users ( id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(100) NOT NULL, email VARCHAR(100) NOT NULL, role VARCHAR(50) NOT NULL );
+---insert sample data
+INSERT INTO users (name, email, role) VALUES ('Kavee Smith', 'kavee@abc.com', 'DevOps Engineer');
+---create DB connection user and grant previlige
+CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY 'DB_secure_password';
+GRANT ALL PRIVILEGES ON company_db.* TO 'root'@'%';
+FLUSH PRIVILEGES;
+
+EXIT;
+
+```
+#### here e donot need to venv since the application deployed inside docker container
+### 3. Add the DB credential to .env file[for local testing]
+
+```bash
+vim .env
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_secure_password
+DB_NAME=company_db
+```
+#### Note: to prevent .env credentials commit to Git repo, add below lines to .gitignore file
+```bash
+vim .gitignore
+.env
+ pycache/
+ *.pyc
+venv/
+```
+### 4. Change the mysql bind address to accept connection from docker container
+
+```bash
+vim /etc/mysql/mysql.conf.d/mysqld.cnf
+# Change bind address
+bind-address = 0.0.0.0
+# Restart mysql to apply changes
+systemctl restart mysql
+
+```
+### 5. Start Docker Container
+```bash
+# you can pass related parameters as arguments
+docker run -d \
+  -p 8000:8000 \
+  -e DB_HOST="host.docker.internal" \
+  -e DB_USER="root" \
+  -e DB_PASSWORD="Kavimb.1" \
+  -e DB_NAME="company_db" \
+  --add-host=host.docker.internal:host-gateway \
+  fastapi-mysql-api
+```
+```bash
+# run below command to see if docker container started
+docker ps
+# run below command to see the container logs
+docker logs -f <container_id>
+```
+### 5. According the this Application, below end points are available to query using curl or postman
+```bash
+#search all records
+curl http://localhost:8000/users
+#search by user_id
+curl http://localhost:8000/users/{id}
+#search by name
+curl http://localhost:8000/users/name/{user_name}
+```
+

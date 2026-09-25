@@ -12,7 +12,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy  application code into the container-path "apps" Excepts file mentioned in .dockerignore file)
+# Copy  application code into the container-path "apps" (Excepts file mentioned in .dockerignore file)
 COPY . .
 
 # Expose the port 8000 Uvicorn will run on
