@@ -1,16 +1,19 @@
-# ======== Kavee's API=============####
 #Python API application to Get the information from a mysql DB
 #imporing SDKs
 import os
 from fastapi import FastAPI, HTTPException
 import pymysql
 import pymysql.cursors
+import logging
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
+# Configure logging for production observability
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-app = FastAPI(title="Simple MySQL API")
+app = FastAPI(title="Python Mysql API")
 
 # Database configuration loaded safely from environment variables
 DB_CONFIG = {
@@ -25,7 +28,12 @@ def get_db_connection():
     try:
         return pymysql.connect(**DB_CONFIG)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Database connection failed: {str(e)}")
+        logger.error(f"Database connection error: {e}")
+        raise HTTPException(
+            status_code=500, 
+            detail="Unable to establish database connection"
+        )
+
 #Define end point @/users", choose db conn and send the mysql query and close connection
 @app.get("/users")
 def get_all_users():
