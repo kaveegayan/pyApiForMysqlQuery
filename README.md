@@ -15,13 +15,16 @@ A lightweight RESTful API built with **Python**, **FastAPI**, and **PyMySQL** to
 * **ASGI Server:** Uvicorn
 
 ---
-
-##  Quickstart Guide to deploy directly on linux server
+### There are two methods you can deploy this application
+### METHOD A: Deploy directly on linux server
+### METHOD B: Deploy on docker container 
+---
+### Below Steps are essential to both methods
 
 ### 1. Clone the Repository
 ```bash
-git clone [https://github.com/your-username/pyApiForMysqlQuery.git]
-cd pyApiForMysqlQuery
+git clone [https://github.com/your-username/kaveegayan.git]
+cd kaveegayan
 ```
 ### 2. Database Setup
 #### Log into your MySQL server and run the following script to create the database, table, and sample records:
@@ -44,11 +47,30 @@ FLUSH PRIVILEGES;
 
 EXIT;
 ```
-### 3. Create Python Virtual Environment & Install Dependencies:Isolate libraries using FastAPI, Uvicorn, and PyMySQL. 
+### 3. Add the DB credential to .env file[for local testing]
+
+```bash
+vim .env
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_secure_password
+DB_NAME=company_db
+```
+#### Note: to prevent .env credentials commit to Git repo, Make sure add below lines(all sensitive data) to .gitignore file
+```bash
+vim .gitignore
+.env
+ pycache/
+ *.pyc
+venv/
+```
+##  METHOD A: Quickstart Guide to deploy directly on linux server
+
+### 1. Create Python Virtual Environment & Install Dependencies:Isolate libraries using FastAPI, Uvicorn, and PyMySQL. 
 #### Open your terminal and run:
 ```bash
 # Go to project directroy
-cd pyApiForMysqlQuery
+cd kaveegayan
 ```
 ```bash
 # Install virtual environment
@@ -60,24 +82,7 @@ pip install fastapi uvicorn pymysql
 #install dot .env to safely pass credentials
 pip install python-dotenv
 ```
-### 4. Add the DB credential to .env file[for local testing]
-
-```bash
-vim .env
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=your_secure_password
-DB_NAME=company_db
-```
-#### Note: to prevent .env credentials commit to Git repo, add below lines to .gitignore file
-```bash
-vim .gitignore
-.env
- pycache/
- *.pyic
-venv/
-```
-### 5. Run the application 
+### 2. Run the application 
 ```bash
 # Open a Screen to run the application on background
 screen -S pyapi
@@ -85,18 +90,18 @@ screen -S pyapi
 ```bash
 # Go to project directory and activate virtual environment here(Because you opened a new screen terminal, need to re activate)
 # Run below commands
-cd pyApiForMysqlQuery
+cd kaveegayan
 source venv/bin/activate
 ```
 ```bash
 # Run application using port 8000
 uvicorn main:app --reload --port 8000
 ```
-### 6. Exit from the screen so application will run background 
+### 3. Exit from the screen so application will run background 
 ```bash
 #Press CTRL+A+D to exit
 ```
-### 7. According the this Application, below end points are available to query using curl or postman
+### 4. According the this Application, below end points are available to query using curl or postman
 ```bash
 #search all records
 curl http://localhost:8000/users
@@ -106,55 +111,9 @@ curl http://localhost:8000/users/{id}
 curl http://localhost:8000/users/name/{user_name}
 ```
 
+## METHOD B: Quickstart Guide to deploy on docker container
 
-
-## Quickstart Guide to deploy on docker container
-### 1. Clone the Repository
-```bash
-git clone [https://github.com/your-username/pyApiForMysqlQuery.git]
-cd pyApiForMysqlQuery
-```
-### 2. Database Setup
-#### Log into your MySQL server and run the following script to create the database, table, and sample records:
-```bash
-mysql -u root -p
-```
-```sql
----create databese
-CREATE DATABASE company_db;
----loging to the database
-USE company_db;
----create the users table
-CREATE TABLE users ( id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(100) NOT NULL, email VARCHAR(100) NOT NULL, role VARCHAR(50) NOT NULL );
----insert sample data
-INSERT INTO users (name, email, role) VALUES ('Kavee Smith', 'kavee@abc.com', 'DevOps Engineer');
----create DB connection user and grant previlige
-CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY 'DB_secure_password';
-GRANT ALL PRIVILEGES ON company_db.* TO 'root'@'%';
-FLUSH PRIVILEGES;
-
-EXIT;
-
-```
-#### here e donot need to venv since the application deployed inside docker container
-### 3. Add the DB credential to .env file[for local testing]
-
-```bash
-vim .env
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=your_secure_password
-DB_NAME=company_db
-```
-#### Note: to prevent .env credentials commit to Git repo, add below lines to .gitignore file
-```bash
-vim .gitignore
-.env
- pycache/
- *.pyc
-venv/
-```
-### 4. Change the mysql bind address to accept connection from docker container
+### 1. Change the mysql bind address to accept connection from docker container
 
 ```bash
 vim /etc/mysql/mysql.conf.d/mysqld.cnf
@@ -164,7 +123,7 @@ bind-address = 0.0.0.0
 systemctl restart mysql
 
 ```
-### 5. Add .dockerignore file to prevent copy unwanted files to docker container
+### 2. Add .dockerignore file to prevent copy unwanted files to docker container
 ```bash
 vim .dockerignore
 __pycache__/
@@ -175,7 +134,12 @@ venv/
 .git/
 .gitignore
 ```
-### 5. Start Docker Container
+### 3. Build docker image
+```bash
+#Run below build command
+docker build -t fastapi-mysql-api .
+```
+### 4. Start Docker Container
 ```bash
 # you can pass related parameters as arguments
 docker run -d \
