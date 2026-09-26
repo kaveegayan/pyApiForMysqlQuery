@@ -23,8 +23,8 @@ A lightweight RESTful API built with **Python**, **FastAPI**, and **PyMySQL** to
 
 ### 1. Clone the Repository
 ```bash
-git clone [https://github.com/your-username/kaveegayan.git]
-cd kaveegayan
+git clone [https://github.com/your-username/pyApiForMysqlQuery.git]
+cd pyApiForMysqlQuery
 ```
 ### 2. Database Setup
 #### Log into your MySQL server and run the following script to create the database, table, and sample records:
@@ -70,7 +70,7 @@ venv/
 #### Open your terminal and run:
 ```bash
 # Go to project directroy
-cd kaveegayan
+cd pyApiForMysqlQuery
 ```
 ```bash
 # Install virtual environment
@@ -90,7 +90,7 @@ screen -S pyapi
 ```bash
 # Go to project directory and activate virtual environment here(Because you opened a new screen terminal, need to re activate)
 # Run below commands
-cd kaveegayan
+cd pyApiForMysqlQuery
 source venv/bin/activate
 ```
 ```bash
