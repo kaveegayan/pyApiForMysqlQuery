@@ -150,7 +150,9 @@ docker run -d \
   -e DB_NAME="company_db" \
   --add-host=host.docker.internal:host-gateway \
   fastapi-mysql-api
-# Note: DB_HOST="host.docker.internal" and --add-host=host.docker.internal:host-gateway parameters forcing Docker to use Hosting server IP as DB ip sice mysql seperately hosted in Host server
+# Note:
+1. DB_HOST="host.docker.internal" and --add-host=host.docker.internal:host-gateway parameters forcing Docker to use Hosting server IP as DB ip sice mysql seperately hosted in Host server
+2. In production environments not safe to pass the credentials as an argument, as an engineer i use "AWS secret Manager" and import boto3 in python app to get credentials safe
 ```
 ```bash
 # run below command to see if docker container started
