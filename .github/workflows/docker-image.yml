@@ -2,17 +2,31 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "develop" ]
-  pull_request:
-    branches: [ "develop" ]
+    branches: [ "develop", "main" ]
 
 jobs:
-
   build:
-
-    runs-on: ubuntu-latest
+    # 1. Change this line from 'ubuntu-latest' to 'self-hosted'
+    runs-on: self-hosted
 
     steps:
     - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+
+    - name: Build Docker Image Directly on Local Server
+      run: |
+        docker build -t py-api-mysql:latest .
+
+    - name: Run or Refresh Local Container
+      run: |
+        docker stop fastapi-app || true
+        docker rm fastapi-app || true
+        docker run -d \
+          --restart unless-stopped \
+          --name fastapi-app \
+          -p 8000:8000 \
+          -e DB_HOST="host.docker.internal" \
+          -e DB_USER="root" \
+          -e DB_PASSWORD="DB_secure_password" \
+          -e DB_NAME="company_db" \
+          --add-host=host.docker.internal:host-gateway \
+          py-api-mysql:latest
