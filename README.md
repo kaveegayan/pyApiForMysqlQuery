@@ -76,7 +76,8 @@ cd pyApiForMysqlQuery
 # Install virtual environment
 apt install python3.12-venv
 # Create and activate virtual environment
-python3 -m venv venv source venv/bin/activate
+python3 -m venv venv
+source venv/bin/activate
 # Install FastAPI, Uvicorn (web server), and PyMySQL
 pip install fastapi uvicorn pymysql
 #install dot .env to safely pass credentials
